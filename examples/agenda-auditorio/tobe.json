@@ -1,0 +1,32 @@
+{
+  "id": "agenda_auditorio_tobe",
+  "name": "Reserva do auditório — TO-BE",
+  "pool": "Secretaria de Eventos · reserva do auditório (to-be)",
+  "lanes": [
+    { "id": "solic", "name": "Solicitante" },
+    { "id": "sis", "name": "Agenda do Auditório" },
+    { "id": "sec", "name": "Secretaria de Eventos" },
+    { "id": "apoio", "name": "Equipe de apoio" }
+  ],
+  "nodes": [
+    { "id": "ini", "type": "start", "lane": "solic", "row": 0, "label": "Precisa do auditório" },
+    { "id": "t1", "type": "user", "lane": "solic", "row": 1, "label": "Escolhe horário livre e envia pedido", "hu": ["HU-01", "HU-02"] },
+    { "id": "t2", "type": "service", "lane": "sis", "row": 2, "label": "Bloqueia conflito e registra pedido", "hu": ["HU-02"], "mark": "gain:1" },
+    { "id": "gw", "type": "xor", "lane": "sec", "row": 3, "label": "Aprovar? (HU-03)" },
+    { "id": "t3", "type": "service", "lane": "sis", "row": 4, "label": "Avisa apoio e cria evento no calendário", "hu": ["HU-04"], "mark": "gain:3" },
+    { "id": "t4", "type": "user", "lane": "apoio", "row": 5, "label": "Prepara a montagem", "hu": ["HU-04"] },
+    { "id": "fim", "type": "end", "lane": "apoio", "row": 6, "label": "Evento pronto" },
+    { "id": "t5", "type": "send", "lane": "sec", "row": 4, "label": "Registra motivo da recusa", "hu": ["HU-03"], "mark": "gain:2" },
+    { "id": "fim2", "type": "end", "lane": "sec", "row": 5, "label": "Pedido recusado" }
+  ],
+  "flows": [
+    { "from": "ini", "to": "t1" },
+    { "from": "t1", "to": "t2" },
+    { "from": "t2", "to": "gw" },
+    { "from": "gw", "to": "t3", "label": "Sim" },
+    { "from": "gw", "to": "t5", "label": "Não" },
+    { "from": "t5", "to": "fim2" },
+    { "from": "t3", "to": "t4" },
+    { "from": "t4", "to": "fim" }
+  ]
+}

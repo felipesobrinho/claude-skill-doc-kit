@@ -1,0 +1,30 @@
+{
+  "id": "agenda_auditorio_asis",
+  "name": "Reserva do auditório — AS-IS",
+  "pool": "Secretaria de Eventos · reserva do auditório (as-is)",
+  "lanes": [
+    { "id": "solic", "name": "Solicitante" },
+    { "id": "sec", "name": "Secretaria de Eventos" },
+    { "id": "apoio", "name": "Equipe de apoio" }
+  ],
+  "nodes": [
+    { "id": "ini", "type": "start", "lane": "solic", "row": 0, "label": "Precisa do auditório" },
+    { "id": "t1", "type": "manual", "lane": "solic", "row": 1, "label": "Consulta a planilha e envia e-mail" },
+    { "id": "t2", "type": "manual", "lane": "sec", "row": 2, "label": "Confere conflito na planilha", "mark": "pain:1" },
+    { "id": "gw", "type": "xor", "lane": "sec", "row": 3, "label": "Dados completos?" },
+    { "id": "t3", "type": "manual", "lane": "solic", "row": 4, "label": "Responde com os dados que faltavam", "mark": "pain:2" },
+    { "id": "t4", "type": "manual", "lane": "sec", "row": 5, "label": "Anota na planilha e responde" },
+    { "id": "t5", "type": "manual", "lane": "apoio", "row": 6, "label": "Recebe encaminhamento (se lembrado)", "mark": "pain:3" },
+    { "id": "fim", "type": "end", "lane": "apoio", "row": 7, "label": "Montagem feita" }
+  ],
+  "flows": [
+    { "from": "ini", "to": "t1" },
+    { "from": "t1", "to": "t2" },
+    { "from": "t2", "to": "gw" },
+    { "from": "gw", "to": "t3", "label": "Não" },
+    { "from": "t3", "to": "t4" },
+    { "from": "gw", "to": "t4", "label": "Sim" },
+    { "from": "t4", "to": "t5" },
+    { "from": "t5", "to": "fim" }
+  ]
+}

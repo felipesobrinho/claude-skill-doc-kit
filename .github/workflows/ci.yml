@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Testes dos scripts
+        run: python -m unittest discover -s tests -v
+      - name: O exemplo passa na avaliação do kit
+        run: python .claude/skills/doc-kit/scripts/check_kit.py examples/agenda-auditorio
+      - name: Os .bpmn do exemplo estão em dia com as specs
+        run: |
+          cd examples/agenda-auditorio
+          for s in asis tobe; do
+            python ../../.claude/skills/doc-kit/scripts/bpmn_from_spec.py $s.json -o /tmp/$s.bpmn
+            diff -q /tmp/$s.bpmn agenda-auditorio-$s.bpmn
+          done

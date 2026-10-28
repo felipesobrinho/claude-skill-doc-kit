@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_agenda_auditorio_tobe" targetNamespace="http://bpmn.io/schema/bpmn" exporter="doc-kit" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_agenda_auditorio_tobe">
+    <bpmn:participant id="Participant_agenda_auditorio_tobe" name="Secretaria de Eventos · reserva do auditório (to-be)" processRef="Process_agenda_auditorio_tobe" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_agenda_auditorio_tobe" name="Reserva do auditório — TO-BE" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_agenda_auditorio_tobe">
+      <bpmn:lane id="Lane_solic" name="Solicitante">
+        <bpmn:flowNodeRef>ini</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_sis" name="Agenda do Auditório">
+        <bpmn:flowNodeRef>t2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t3</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_sec" name="Secretaria de Eventos">
+        <bpmn:flowNodeRef>gw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>fim2</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_apoio" name="Equipe de apoio">
+        <bpmn:flowNodeRef>t4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>fim</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="ini" name="Precisa do auditório">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="t1" name="Escolhe horário livre e envia pedido">
+      <bpmn:documentation>Histórias: HU-01, HU-02</bpmn:documentation>
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="t2" name="Bloqueia conflito e registra pedido (G1)">
+      <bpmn:documentation>Histórias: HU-02</bpmn:documentation>
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="gw" name="Aprovar? (HU-03)">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="t3" name="Avisa apoio e cria evento no calendário (G3)">
+      <bpmn:documentation>Histórias: HU-04</bpmn:documentation>
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="t4" name="Prepara a montagem">
+      <bpmn:documentation>Histórias: HU-04</bpmn:documentation>
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="fim" name="Evento pronto">
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sendTask id="t5" name="Registra motivo da recusa (G2)">
+      <bpmn:documentation>Histórias: HU-03</bpmn:documentation>
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="fim2" name="Pedido recusado">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="ini" targetRef="t1" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="t1" targetRef="t2" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="t2" targetRef="gw" />
+    <bpmn:sequenceFlow id="Flow_4" name="Sim" sourceRef="gw" targetRef="t3" />
+    <bpmn:sequenceFlow id="Flow_5" name="Não" sourceRef="gw" targetRef="t5" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="t5" targetRef="fim2" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="t3" targetRef="t4" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="t4" targetRef="fim" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_agenda_auditorio_tobe">
+    <bpmndi:BPMNPlane id="Plane_agenda_auditorio_tobe" bpmnElement="Collaboration_agenda_auditorio_tobe">
+      <bpmndi:BPMNShape id="Participant_agenda_auditorio_tobe_di" bpmnElement="Participant_agenda_auditorio_tobe" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1280" height="600" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_solic_di" bpmnElement="Lane_solic" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1250" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_sis_di" bpmnElement="Lane_sis" isHorizontal="true">
+        <dc:Bounds x="190" y="230" width="1250" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_sec_di" bpmnElement="Lane_sec" isHorizontal="true">
+        <dc:Bounds x="190" y="380" width="1250" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_apoio_di" bpmnElement="Lane_apoio" isHorizontal="true">
+        <dc:Bounds x="190" y="530" width="1250" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ini_di" bpmnElement="ini">
+        <dc:Bounds x="272" y="137" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="240" y="179" width="100" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t1_di" bpmnElement="t1">
+        <dc:Bounds x="400" y="115" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t2_di" bpmnElement="t2">
+        <dc:Bounds x="570" y="265" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_di" bpmnElement="gw" isMarkerVisible="true">
+        <dc:Bounds x="775" y="430" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="750" y="486" width="100" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t3_di" bpmnElement="t3">
+        <dc:Bounds x="910" y="265" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t4_di" bpmnElement="t4">
+        <dc:Bounds x="1080" y="565" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="fim_di" bpmnElement="fim">
+        <dc:Bounds x="1292" y="587" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1260" y="629" width="100" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t5_di" bpmnElement="t5">
+        <dc:Bounds x="910" y="415" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="fim2_di" bpmnElement="fim2">
+        <dc:Bounds x="1122" y="437" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1090" y="479" width="100" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="308" y="155" />
+        <di:waypoint x="400" y="155" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="520" y="155" />
+        <di:waypoint x="565" y="155" />
+        <di:waypoint x="565" y="305" />
+        <di:waypoint x="570" y="305" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="690" y="305" />
+        <di:waypoint x="735" y="305" />
+        <di:waypoint x="735" y="455" />
+        <di:waypoint x="775" y="455" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="800" y="430" />
+        <di:waypoint x="800" y="305" />
+        <di:waypoint x="910" y="305" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="825" y="455" />
+        <di:waypoint x="910" y="455" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1030" y="455" />
+        <di:waypoint x="1122" y="455" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="1030" y="305" />
+        <di:waypoint x="1075" y="305" />
+        <di:waypoint x="1075" y="605" />
+        <di:waypoint x="1080" y="605" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8">
+        <di:waypoint x="1200" y="605" />
+        <di:waypoint x="1292" y="605" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,27 @@
+{
+  "id": "projeto_tobe",
+  "name": "Processo — TO-BE",
+  "pool": "Setor · processo (to-be)",
+  "lanes": [
+    { "id": "solic", "name": "Solicitante" },
+    { "id": "resp", "name": "Responsável" },
+    { "id": "sis", "name": "Sistema" }
+  ],
+  "nodes": [
+    { "id": "ini", "type": "start", "lane": "solic", "row": 0, "label": "Necessidade surge" },
+    { "id": "t1", "type": "user", "lane": "solic", "row": 1, "label": "Registra o pedido", "hu": ["HU-01"] },
+    { "id": "t2", "type": "service", "lane": "sis", "row": 2, "label": "Valida regras e registra", "hu": ["HU-02"], "mark": "gain:1" },
+    { "id": "gw", "type": "xor", "lane": "resp", "row": 3, "label": "Aprovado? (HU-03)" },
+    { "id": "t3", "type": "send", "lane": "sis", "row": 4, "label": "Avisa as pessoas envolvidas", "hu": ["HU-04"], "mark": "gain:2" },
+    { "id": "fim", "type": "end", "lane": "solic", "row": 5, "label": "Pedido concluído" },
+    { "id": "fim2", "type": "end", "lane": "resp", "row": 4, "label": "Pedido recusado" }
+  ],
+  "flows": [
+    { "from": "ini", "to": "t1" },
+    { "from": "t1", "to": "t2" },
+    { "from": "t2", "to": "gw" },
+    { "from": "gw", "to": "t3", "label": "Sim" },
+    { "from": "gw", "to": "fim2", "label": "Não" },
+    { "from": "t3", "to": "fim" }
+  ]
+}
